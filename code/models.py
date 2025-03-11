@@ -543,8 +543,8 @@ def main_clm(model_name: str, device: torch.device) -> None:
     # model = ContrastiveSteeringModule(device=device, head_dim=64, hidden_dim=4096).to(device)
     
     print(model)
-    model.train()
-    with torch.autocast("cuda"):
+    model.eval()
+    with torch.no_grad(), torch.autocast("cuda"):
         out = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels, padding_mask=padding_mask) # (b, V)
         # out = model(x=torch.rand(size=(16, 512, 4096)), padding_mask=torch.cat([torch.ones(size=(16, 500)), torch.zeros(size=(16, 12))], dim=-1))
     print(out["logits"].max(), out["logits"].min(), out["loss"], out["acc"])
